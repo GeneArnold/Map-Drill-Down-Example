@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="map_drill_region_lvl" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="94b99bad-9efb-4bc2-82e1-978ea620c669">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Map Regions"/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.report.resource" value="/public/My_Samples/map_drill_region_lvl_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/public/My_Samples/map_drill_region_lvl"/>
+	<parameter name="par_RegionName" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["USA_North_East_Region"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+  SUM("State_Data".value),
+  "Regions".region_long_name, 
+  
+  "Regions".state_id
+FROM 
+  public."State_Data", 
+  public."Regions"
+WHERE 
+  "Regions".state_short_name = "State_Data".region
+GROUP BY 
+"Regions".region_long_name,"Regions".state_id
+ORDER BY
+"Regions".region_long_name]]>
+	</queryString>
+	<field name="sum" class="java.math.BigDecimal"/>
+	<field name="region_long_name" class="java.lang.String"/>
+	<field name="state_id" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="330" y="10" width="100" height="20" uuid="d19711ee-03f1-4145-a9b2-3a5bc2a03a8c"/>
+				<textFieldExpression><![CDATA[SUBSTITUTE($P{par_RegionName},"_","")]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<summary>
+		<band height="330" splitType="Stretch">
+			<componentElement>
+				<reportElement x="150" y="0" width="510" height="330" uuid="8c7cf668-76ea-4682-abb9-2b4977c40177"/>
+				<fm:map xmlns:fm="http://jaspersoft.com/fusion" xsi:schemaLocation="http://jaspersoft.com/fusion http://jaspersoft.com/schema/fusion.xsd">
+					<fm:mapNameExpression><![CDATA[SUBSTITUTE($P{par_RegionName},"_","")]]></fm:mapNameExpression>
+					<fm:mapDataset>
+						<fm:entity>
+							<fm:idExpression><![CDATA[$F{state_id}]]></fm:idExpression>
+							<fm:valueExpression><![CDATA[$F{sum}]]></fm:valueExpression>
+						</fm:entity>
+					</fm:mapDataset>
+					<fm:shapeData/>
+					<c:markerData xmlns:c="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd"/>
+				</fm:map>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="map_drill_down" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c29c47db-9cab-4720-ac11-4c0b0b842614">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Map Regions"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+  sum("State_Data".value) AS "Amount", 
+  "Regions".region_id AS "Region_ID",
+  "Regions".region_short_name
+FROM 
+  public."Regions", 
+  public."State_Data"
+WHERE 
+  "State_Data".region = "Regions".state_short_name
+GROUP BY
+ "Regions".region_id,"Regions".region_short_name]]>
+	</queryString>
+	<field name="Amount" class="java.math.BigDecimal"/>
+	<field name="Region_ID" class="java.lang.String"/>
+	<field name="region_short_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="36" splitType="Stretch"/>
+	</title>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement x="197" y="0" width="100" height="20" uuid="52706a92-d5e5-4e16-8beb-2c15a6762d62"/>
+				<text><![CDATA[region_short_name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="359" y="0" width="100" height="20" uuid="37b4d30f-7539-4564-ae21-6e842ef7f35d"/>
+				<text><![CDATA[Region_ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="534" y="0" width="100" height="20" uuid="323b5664-9b3d-40ab-8087-a4f49bb10145"/>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="197" y="0" width="100" height="20" uuid="b323f9bd-c57e-408f-9611-246c3a8bcb74"/>
+				<textFieldExpression><![CDATA[$F{region_short_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="100" height="20" uuid="bf573bff-d941-4c8e-bb9c-948495bf00ed"/>
+				<textFieldExpression><![CDATA[$F{Region_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="534" y="0" width="100" height="20" uuid="96cc0c12-e29d-4590-ba35-d28c8eea7113"/>
+				<textFieldExpression><![CDATA[$F{Amount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="320" splitType="Stretch">
+			<componentElement>
+				<reportElement x="120" y="0" width="590" height="310" uuid="af10e5d5-5ea5-46e2-8752-2225f00ba7b2"/>
+				<fm:map xmlns:fm="http://jaspersoft.com/fusion" xsi:schemaLocation="http://jaspersoft.com/fusion http://jaspersoft.com/schema/fusion.xsd">
+					<fm:mapNameExpression><![CDATA["USARegion"]]></fm:mapNameExpression>
+					<fm:mapDataset>
+						<fm:entity>
+							<fm:idExpression><![CDATA[$F{Region_ID}]]></fm:idExpression>
+							<fm:valueExpression><![CDATA[$F{Amount}]]></fm:valueExpression>
+						</fm:entity>
+					</fm:mapDataset>
+					<fm:shapeData/>
+					<c:markerData xmlns:c="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd"/>
+				</fm:map>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>

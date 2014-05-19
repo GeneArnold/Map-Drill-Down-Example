@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="map_drill_state_lvl" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0914d922-ee5f-4d31-82da-bc6f0ef7975d">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Map Regions"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+  SUM("State_Data".value), 
+  "State_Data".region, 
+  "Regions".region_long_name
+FROM 
+  public."Regions", 
+  public."State_Data"
+WHERE 
+  "State_Data".region = "Regions".state_short_name
+GROUP BY
+"State_Data".region, 
+  "Regions".region_long_name
+ORDER BY 
+"Regions".region_long_name]]>
+	</queryString>
+	<field name="region" class="java.lang.String"/>
+	<field name="sum" class="java.math.BigDecimal"/>
+	<field name="region_long_name" class="java.lang.String"/>
+	<variable name="varRegionReport" class="java.lang.String">
+		<variableExpression><![CDATA["/public/My_Samples/map_drill_region_lvl"]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="48" splitType="Stretch"/>
+	</title>
+	<summary>
+		<band height="320" splitType="Stretch">
+			<componentElement>
+				<reportElement x="140" y="0" width="520" height="320" uuid="2b9936ae-15ad-47d3-a8a2-c7a9be1af365"/>
+				<fm:map xmlns:fm="http://jaspersoft.com/fusion" xsi:schemaLocation="http://jaspersoft.com/fusion http://jaspersoft.com/schema/fusion.xsd">
+					<fm:mapNameExpression><![CDATA["USA"]]></fm:mapNameExpression>
+					<fm:mapDataset>
+						<fm:entity>
+							<fm:idExpression><![CDATA[$F{region}]]></fm:idExpression>
+							<fm:valueExpression><![CDATA[$F{sum}]]></fm:valueExpression>
+							<fm:hyperlink hyperlinkType="ReportExecution">
+								<hyperlinkParameter name="_report">
+									<hyperlinkParameterExpression><![CDATA[$V{varRegionReport}]]></hyperlinkParameterExpression>
+								</hyperlinkParameter>
+								<hyperlinkParameter name="par_RegionName">
+									<hyperlinkParameterExpression><![CDATA[$F{region_long_name}]]></hyperlinkParameterExpression>
+								</hyperlinkParameter>
+							</fm:hyperlink>
+						</fm:entity>
+					</fm:mapDataset>
+					<fm:shapeData/>
+					<c:markerData xmlns:c="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd"/>
+				</fm:map>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>
